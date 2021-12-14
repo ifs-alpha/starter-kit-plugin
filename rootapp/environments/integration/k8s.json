@@ -1,0 +1,16 @@
+{
+  "cluster_info": {
+    "cluster_name": "{{CLUSTER_NAME_INTEGRATION}}(kebabCase)",
+    "machine_type": "{{CLUSTER_MACHINE_TYPE}}",
+    "worker_count": "{{CLUSTER_WORKER_COUNT}}",
+    "high_availability": "{{CLUSTER_HIGH_AVAILABILITY}}",
+    "kube_version": "{{CLUSTER_KUBE_VERSION}}",
+    "namespaces": [
+      {{CLUSTER_NAMESPACES}}
+    ],
+    "worker_pools": {},
+    "sysdig_filters": {
+      "includes": []
+    }
+  }
+}

@@ -1,0 +1,49 @@
+{
+    "region": "eu-de",
+    "project": "{{YOUR_PROJECT}}(lowerCase)",
+    "environment_type": "integration",
+    "environment_id": "int",
+    "application_name": "{{YOUR_APP_NAME}}(lowerCase)",
+    "starterkits_rg": "{{YOUR_APP_NAME}}(lowerCase)-candidate",
+    "vpc_name": "{{VPC_NAME}}",
+    "landing_zone_rg": "Default",
+    "landing_zone_activity_tracker_instance_name": "{{ACTIVITY_TRACKER_NAME}}",
+    "landing_zone_sysdig_instance_name": "{{SYSDIG_NAME}}",
+    "landing_zone_logdna_instance_name": "{{LOGDNA_NAME}}",
+    "cis_instance_info": {
+      "blocked_countries": [
+        "IR",
+        "SY",
+        "SD",
+        "CU",
+        "SS"
+      ]
+    },
+    "domains": {
+      "{{YOUR_DOMAIN_NAME_INTEGRATION}}": {
+        "subdomains": {
+          "{{YOUR_SUBDOMAIN_NAME}}": {
+            "rate_limiting_rule": {
+              "methods": [
+                "GET", 
+                "POST", 
+                "PUT", 
+                "DELETE", 
+                "PATCH", 
+                "HEAD"
+              ],
+              "threshold": 20,
+              "period": 900,
+              "timeout": 43200,
+              "response_type": "text/plain",
+              "response_body": "custom response body"
+            }
+          },
+          "ingress_authorized_ips": [
+            "0.0.0.0/0", 
+            "::/0"
+          ]
+        }
+      }
+    }
+}

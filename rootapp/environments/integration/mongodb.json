@@ -1,0 +1,13 @@
+{
+  "mongodb_instance_info": {
+    "name": "{{MONGODB_NAME}}(lowerCase)",
+    "plan": "standard",
+    "version": "latest",
+    "members_memory_allocation_mb": 6144,
+    "members_disk_allocation_mb": 30720,
+    "authorized_ips": [ 
+      "0.0.0.0/0", 
+      "::/0"
+    ]
+  }
+}
