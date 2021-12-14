@@ -1,0 +1,75 @@
+version: 2.1
+
+orbs:
+  utils-orb: bivwak/utils-orb@0.0.45
+  starterkits: bivwak/starterkits-orb@2.5.1
+
+workflows:
+  deploy_sk_integration:
+    jobs:
+      - utils-orb/inject_backend_terraform:
+          context: {{YOUR_INTEGRATION_CONTEXT}}
+          name: inject_tf_backend
+          state_key: $(TARGET_ENVIRONMENT=${CIRCLE_PROJECT_REPONAME}-integration; TARGET_ENVIRONMENT=$(echo ${TARGET_ENVIRONMENT} | tr '[:upper:]' '[:lower:]'); echo $TARGET_ENVIRONMENT)
+          filters:
+            branches:
+              only:
+                - develop
+      - starterkits/deploy_module:
+          context: {{YOUR_INTEGRATION_CONTEXT}}
+          requires:
+            - inject_tf_backend
+          module: bivwak-ibm-container-service
+          version: 0.17.0 # See https://github.com/ifs-alpha/bivwak-ibm-container-service/releases for more information
+          path_vars: environments/integration
+          terraform_version: 1.0.7
+          filters:
+            branches:
+              only:
+              - develop
+
+  deploy_sk_candidate:
+    jobs:
+      - utils-orb/inject_backend_terraform:
+          context: {{YOUR_CANDIDATE_CONTEXT}}
+          name: inject_tf_backend
+          state_key: $(TARGET_ENVIRONMENT=${CIRCLE_PROJECT_REPONAME}-candidate; TARGET_ENVIRONMENT=$(echo ${TARGET_ENVIRONMENT} | tr '[:upper:]' '[:lower:]'); echo $TARGET_ENVIRONMENT)
+          filters:
+            branches:
+              only:
+                - release
+      - starterkits/deploy_module:
+          context: {{YOUR_CANDIDATE_CONTEXT}}
+          requires:
+            - inject_tf_backend
+          module: bivwak-ibm-container-service
+          version: 0.17.0 # See https://github.com/ifs-alpha/bivwak-ibm-container-service/releases for more information
+          path_vars: environments/candidate
+          terraform_version: 1.0.7
+          filters:
+            branches:
+              only:
+              - release
+
+  deploy_sk_release:
+    jobs:
+      - utils-orb/inject_backend_terraform:
+          context: {{YOUR_RELEASE_CONTEXT}}
+          name: inject_tf_backend
+          state_key: $(TARGET_ENVIRONMENT=${CIRCLE_PROJECT_REPONAME}-release; TARGET_ENVIRONMENT=$(echo ${TARGET_ENVIRONMENT} | tr '[:upper:]' '[:lower:]'); echo $TARGET_ENVIRONMENT)
+          filters:
+            branches:
+              only:
+                - master
+      - starterkits/deploy_module:
+          context: {{YOUR_RELEASE_CONTEXT}}
+          requires:
+            - inject_tf_backend
+          molecule: bivwak-ibm-container-service
+          version: 0.17.0 # See https://github.com/ifs-alpha/bivwak-ibm-container-service/releases for more information
+          path_vars: environments/release
+          terraform_version: 1.0.7
+          filters:
+            branches:
+              only:
+              - master

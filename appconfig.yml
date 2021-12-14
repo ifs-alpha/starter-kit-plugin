@@ -1,0 +1,60 @@
+# ------------------------------------------------
+# Configuration pour la génération automatique.
+# Merci de lire attentivement les commentaires.
+# -------------------------------------------------
+
+
+
+# CircleCI est l'outil de build CI/CD utilisé chez Bivwak. 
+# Les contextes constituent un espace contenant vos variables privées et cloisonnées par environnement. 
+# Entrez ici les noms fournis à vos contextes CircleCI.
+# Vous pourrez les retrouver ici pour votre application:  https://app.circleci.com/settings/organization/github/ifs-alpha/contexts
+
+circleci:
+  context:
+    integration: my-super-context-integration
+    candidate: my-super-context-candidate
+    release: my-release-CONTEXT
+
+
+project:
+  name: MySuperProject
+  appName: mysuperappname
+  vpcName: vpc2
+  domains:
+    root: 
+      integration: apps-integration.bivwak.com
+      candidate: apps-candidate.bivwak.com
+      release: apps-release.bivwak.com
+    subdomains:
+      - name: self
+
+
+landingzone:
+  activityTracker: bivwak-activitytracker
+  sysdig: bivwak-monitorSysdig
+  logdna: bivwak-logAnalysis
+  cms: cms-tangatajobs-release.ibm.ifsalpha.com
+
+
+cos:
+  name: my-app-storage
+  bucketName: my-app-bucket
+
+
+k8s:
+  cluster:
+    name: 
+      integration: int-cluster
+      candidate: cdd-cluster
+      release: rls-cluster
+    namespaces: '"front", "back"'
+
+mongodb:
+  name: my-mongo-dbname
+
+postgresql:
+  name: mypostgresinstance
+
+redis:
+  name: my-redis

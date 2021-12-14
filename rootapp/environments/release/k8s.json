@@ -1,0 +1,26 @@
+{
+  "cluster_info": {
+    "cluster_name": "{{CLUSTER_NAME_RELEASE}}(kebabCase)",
+    "machine_type": "cx2.4x8",
+    "worker_count": "1",
+    "high_availability": false,
+    "kube_version": "1.21",
+    "namespaces": [
+      {{CLUSTER_NAMESPACES}}
+    ],
+    "worker_pools": {
+      "worker_pool_name": {
+        "machine_type": "cx2.4x8",
+        "min_size": 1,
+        "max_size": 1,
+        "labels": {
+          "label1" : "value1",
+          "label2" : "value2"
+        }
+      }
+    },
+    "sysdig_filters": {
+      "includes": []
+    }
+  }
+}

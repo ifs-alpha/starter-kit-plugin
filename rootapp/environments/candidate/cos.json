@@ -1,0 +1,24 @@
+{
+  "cos_instance_info": {
+    "cos_instance_name": "{{COS_NAME}}(kebabCase)",
+    "bucket_iam_role": [
+      "Reader",
+      "Writer"
+    ],
+    "application_allowed_ips": [
+      "0.0.0.0/0",
+      "::/0"
+    ],
+    "backup_config": {
+      "backup_expire_days" : 365,
+      "backup_scheduler": "0 0 1 * *",
+      "backup_prefix_format": "%Y-%m-%d"
+    },
+    "buckets": {
+      "{{BUCKET_NAME}}(kebabCase)": {
+        "storage_class": "standard",
+        "force_delete": false
+      }
+    }
+  }
+}

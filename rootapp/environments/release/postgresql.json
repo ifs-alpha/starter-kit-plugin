@@ -1,0 +1,9 @@
+{
+  "postgresql_instance_info": {
+    "name": "{{POSTGRESQL_NAME}}(lowerCase)",
+    "plan": "standard",
+    "version": "latest",
+    "members_memory_allocation_mb": 6144,
+    "members_disk_allocation_mb": 30720
+  }
+}
