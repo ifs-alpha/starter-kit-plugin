@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-# starter-kit-plugin
-=======
 # starter-kit-plugin README
 
 This is the README for your extension "starter-kit-plugin". After writing up a brief description, we recommend including the following sections.
@@ -66,4 +63,3 @@ Added features X, Y, and Z.
 * [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
 
 **Enjoy!**
->>>>>>> 105f903 (starter-kit-plugin helloworld commit)
