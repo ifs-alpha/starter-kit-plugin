@@ -1,5 +1,16 @@
 # starter-kit-plugin README
 
+HOW TO RUN : 
+
+After pulling the project main
+
+1. Press F5 TO run extention. 
+2. Press Ctrl + Shift + P to execute command 
+3. Run 'Starter Config' in prompt
+
+YOU SHOUD SEE A MESSAGE popup "Hello World from Starter Kit Plugin!"
+
+
 This is the README for your extension "starter-kit-plugin". After writing up a brief description, we recommend including the following sections.
 
 ## Features
