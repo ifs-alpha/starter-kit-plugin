@@ -8,7 +8,7 @@ workflows:
   deploy_sk_integration:
     jobs:
       - utils-orb/inject_backend_terraform:
-          context: {{YOUR_INTEGRATION_CONTEXT}}
+          context: {{circleci.context.integration}}
           name: inject_tf_backend
           state_key: $(TARGET_ENVIRONMENT=${CIRCLE_PROJECT_REPONAME}-integration; TARGET_ENVIRONMENT=$(echo ${TARGET_ENVIRONMENT} | tr '[:upper:]' '[:lower:]'); echo $TARGET_ENVIRONMENT)
           filters:

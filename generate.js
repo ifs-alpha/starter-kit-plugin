@@ -1,4 +1,6 @@
 const zip = require('zip-a-folder').zip;
+const vscode = require('vscode');
+
 
 const { generateTemplateFilesBatch } = require('generate-template-files');
 const APPCONFIG_LOCATION = '/appconfig.yml';
@@ -60,14 +62,14 @@ loadConfiguration(root);
 
 
 
-// const flattenJsonConfig = flattenObject(jsonConfig)
-// console.log(flattenJsonConfig)
+const flattenJsonConfig = flattenObject(jsonConfig);
+console.log(flattenJsonConfig);
 
-// Create a list of object, in the format : 
-// {slot: "{{the_key_in_yaml_config}}", slotValue: "its_value"}.  
-// const dynamicPlaceholders = Object.entries(flattenJsonConfig).map(([key, value]) => {
-//   return {slot: `{{${key}}}`, slotValue: value}
-// })
+//Create a list of object, in the format : 
+//{slot: "{{the_key_in_yaml_config}}", slotValue: "its_value"}.  
+const dynamicPlaceholders = Object.entries(flattenJsonConfig).map(([key, value]) => {
+  return {slot: `{{${key}}}`, slotValue: value}
+})
 
 // console.log(dynamicPlaceholders)
 
@@ -84,45 +86,46 @@ generateTemplateFilesBatch([
     // Ce qui permettra d'automatiqement remplacer les propriétés contenues dans les templates, 
     // si elles sont de la forme {{abc.def.ghi}} (qui correspondra à une ppté yaml abc.def.ghi)
     // (voir "dynamicPlaceholders" commenté ci dessus)
-    dynamicReplacers: [
-      { slot: '{{YOUR_INTEGRATION_CONTEXT}}', slotValue: jsonConfig.circleci.context.integration },
-      { slot: '{{YOUR_CANDIDATE_CONTEXT}}', slotValue: jsonConfig.circleci.context.candidate },
-      { slot: '{{YOUR_RELEASE_CONTEXT}}', slotValue: jsonConfig.circleci.context.release },
+    dynamicReplacers: dynamicPlaceholders,
+    //[
+      // { slot: '{{YOUR_INTEGRATION_CONTEXT}}', slotValue: jsonConfig.circleci.context.integration },
+      // { slot: '{{YOUR_CANDIDATE_CONTEXT}}', slotValue: jsonConfig.circleci.context.candidate },
+      // { slot: '{{YOUR_RELEASE_CONTEXT}}', slotValue: jsonConfig.circleci.context.release },
 
-      // Common config.
-      { slot: '{{YOUR_PROJECT}}', slotValue: jsonConfig.project.name },
-      { slot: '{{YOUR_APP_NAME}}', slotValue: jsonConfig.project.appName },
-      { slot: '{{VPC_NAME}}', slotValue: jsonConfig.project.vpcName },
+      // // Common config.
+      // { slot: '{{YOUR_PROJECT}}', slotValue: jsonConfig.project.name },
+      // { slot: '{{YOUR_APP_NAME}}', slotValue: jsonConfig.project.appName },
+      // { slot: '{{VPC_NAME}}', slotValue: jsonConfig.project.vpcName },
 
 
-      { slot: '{{ACTIVITY_TRACKER_NAME}}', slotValue: jsonConfig.landingzone.activityTracker },
-      { slot: '{{SYSDIG_NAME}}', slotValue: jsonConfig.landingzone.sysdig },
-      { slot: '{{LOGDNA_NAME}}', slotValue: jsonConfig.landingzone.logdna },
+      // { slot: '{{ACTIVITY_TRACKER_NAME}}', slotValue: jsonConfig.landingzone.activityTracker },
+      // { slot: '{{SYSDIG_NAME}}', slotValue: jsonConfig.landingzone.sysdig },
+      // { slot: '{{LOGDNA_NAME}}', slotValue: jsonConfig.landingzone.logdna },
 
-      // Domains. TODO: Construire dynamiquement cette liste si plusieurs sous domaines sont detectés
-      { slot: '{{YOUR_DOMAIN_NAME}}', slotValue: jsonConfig.project.domains.root },
-      { slot: '{{YOUR_SUBDOMAIN_NAME}}', slotValue: jsonConfig.project.domains.subdomains[0].name },
+      // // Domains. TODO: Construire dynamiquement cette liste si plusieurs sous domaines sont detectés
+      // { slot: '{{YOUR_DOMAIN_NAME}}', slotValue: jsonConfig.project.domains.root },
+      // { slot: '{{YOUR_SUBDOMAIN_NAME}}', slotValue: jsonConfig.project.domains.subdomains[0].name },
 
-      // Cos config
-      { slot: '{{COS_NAME}}', slotValue: jsonConfig.cos.name },
-      { slot: '{{BUCKET_NAME}}', slotValue: jsonConfig.cos.bucketName },
+      // // Cos config
+      // { slot: '{{COS_NAME}}', slotValue: jsonConfig.cos.name },
+      // { slot: '{{BUCKET_NAME}}', slotValue: jsonConfig.cos.bucketName },
 
-      // K8S
-      { slot: '{{CLUSTER_NAME_INTEGRATION}}', slotValue: jsonConfig.k8s.cluster.name.integration },
-      { slot: '{{CLUSTER_NAME_CANDIDATE}}', slotValue: jsonConfig.k8s.cluster.name.candidate },
-      { slot: '{{CLUSTER_NAME_RELEASE}}', slotValue: jsonConfig.k8s.cluster.name.release },
+      // // K8S
+      // { slot: '{{CLUSTER_NAME_INTEGRATION}}', slotValue: jsonConfig.k8s.cluster.name.integration },
+      // { slot: '{{CLUSTER_NAME_CANDIDATE}}', slotValue: jsonConfig.k8s.cluster.name.candidate },
+      // { slot: '{{CLUSTER_NAME_RELEASE}}', slotValue: jsonConfig.k8s.cluster.name.release },
 
-      { slot: '{{CLUSTER_NAMESPACES}}', slotValue: jsonConfig.k8s.cluster.namespaces },
+      // { slot: '{{CLUSTER_NAMESPACES}}', slotValue: jsonConfig.k8s.cluster.namespaces },
 
-      // MongoDB
-      { slot: '{{MONGODB_NAME}}', slotValue: jsonConfig.mongodb.name },
+      // // MongoDB
+      // { slot: '{{MONGODB_NAME}}', slotValue: jsonConfig.mongodb.name },
 
-      // PostgreSQL
-      { slot: '{{POSTGRESQL_NAME}}', slotValue: jsonConfig.postgresql.name },
-      // Redis
-      { slot: '{{REDIS_NAME}}', slotValue: jsonConfig.redis.name },
+      // // PostgreSQL
+      // { slot: '{{POSTGRESQL_NAME}}', slotValue: jsonConfig.postgresql.name },
+      // // Redis
+      // { slot: '{{REDIS_NAME}}', slotValue: jsonConfig.redis.name },
 
-    ],
+    //],
     output: {
       path: root+`/out/`,
       overwrite: true,
@@ -131,6 +134,7 @@ generateTemplateFilesBatch([
     onComplete: async (results) => {
       // A la fin, generer un zip si loption --zip a été fournie en argument
       const shouldZip = process.argv[2] === '--zip'
+      console.log(root+'/out');
 
       if (shouldZip) {
         const zipFile = './generated-project.zip';
@@ -144,7 +148,14 @@ generateTemplateFilesBatch([
 ]).catch((e) => {
   console.log('Build Error', e);
 });
-
+try {
+  console.log(root);
+  let uri = vscode.Uri.file(root+'/out');
+  let result = vscode.commands.executeCommand('vscode.openFolder', uri);
+      console.log(result)
+      } catch (err) {
+        console.error(err);
+      }
 }
 
 module.exports = {generate}
