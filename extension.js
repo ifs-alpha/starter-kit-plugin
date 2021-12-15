@@ -1,7 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 const vscode = require('vscode');
-
+import { HelloWorldPanel } from "./src/panels/HelloWorldPanel";
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 
@@ -22,6 +22,7 @@ function activate(context) {
 
 		// Display a message box to the user
 		vscode.window.showInformationMessage('Hello World from Starter Kit Plugin!');
+		HelloWorldPanel.render(context.extensionUri);
 	});
 
 	context.subscriptions.push(disposable);
